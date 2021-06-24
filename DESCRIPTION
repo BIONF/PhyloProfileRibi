@@ -11,15 +11,15 @@ Description: PhyloProfile is a tool for exploring complex phylogenetic profiles.
 URL: https://github.com/BIONF/PhyloProfileRibi/
 BugReports: https://github.com/BIONF/PhyloProfileRibi/issues
 License: MIT + file LICENSE
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.1.0)
 Encoding: UTF-8
 biocViews: Software, Visualization, DataRepresentation, MultipleComparison, FunctionalPrediction
 Imports:
     BiocStyle, colourpicker, data.table, DT, energy, ggplot2, shinyBS,
     shinyjs, PhyloProfile (>= 1.6.4)
 RoxygenNote: 7.1.1
-Suggests: 
+Suggests:
     knitr, rmarkdown, testthat,
-    ape, bioDist, Biostrings, data.table, 
+    ape, bioDist, Biostrings, data.table,
     gridExtra, pbapply, RColorBrewer, shiny, OmaDB, plyr, xml2, zoo
 VignetteBuilder: knitr

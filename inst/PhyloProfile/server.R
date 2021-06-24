@@ -469,22 +469,22 @@ shinyServer(function(input, output, session) {
                     selected = "top"
                 )
                 updateNumericInput(
-                    session, 
+                    session,
                     "width", value = wv  + 50
                 )
             } else if (h <= 30) {
                 updateNumericInput(
-                    session, 
+                    session,
                     "width", value = wv + 50
                 )
             } else {
                 updateNumericInput(
-                    session, 
+                    session,
                     "width", value = wv
                 )
             }
             updateNumericInput(
-                session, 
+                session,
                 "height", value = hv
             )
         }
@@ -512,9 +512,13 @@ shinyServer(function(input, output, session) {
                 "xAxis" = input$xAxis,
                 "var1ID" = var1ID,
                 "var2ID"  = var2ID,
+                "midVar1" = input$midVar1,
+                "midVar2" = input$midVar2,
                 "lowColorVar1" =  input$lowColorVar1,
+                "midColorVar1" =  input$midColorVar1,
                 "highColorVar1" = input$highColorVar1,
                 "lowColorVar2" = input$lowColorVar2,
+                "midColorVar2" =  input$midColorVar2,
                 "highColorVar2" = input$highColorVar2,
                 "paraColor" = input$paraColor,
                 "xSize" = input$xSize,
@@ -534,9 +538,13 @@ shinyServer(function(input, output, session) {
                     "xAxis" = input$xAxis,
                     "var1ID" = var1ID,
                     "var2ID"  = var2ID,
+                    "midVar1" = input$midVar1,
+                    "midVar2" = input$midVar2,
                     "lowColorVar1" =  input$lowColorVar1,
+                    "midColorVar1" =  input$midColorVar1,
                     "highColorVar1" = input$highColorVar1,
                     "lowColorVar2" = input$lowColorVar2,
+                    "midColorVar2" =  input$midColorVar2,
                     "highColorVar2" = input$highColorVar2,
                     "paraColor" = input$paraColor,
                     "xSize" = input$xSize,
@@ -680,22 +688,22 @@ shinyServer(function(input, output, session) {
                     selected = "top"
                 )
                 updateNumericInput(
-                    session, 
+                    session,
                     "selectedWidth", value = wv  + 50
                 )
             } else if (h <= 30) {
                 updateNumericInput(
-                    session, 
+                    session,
                     "selectedWidth", value = wv + 50
                 )
             } else {
                 updateNumericInput(
-                    session, 
+                    session,
                     "selectedWidth", value = wv
                 )
             }
             updateNumericInput(
-                session, 
+                session,
                 "selectedHeight", value = hv
             )
         }
@@ -723,9 +731,13 @@ shinyServer(function(input, output, session) {
                 "xAxis" = input$xAxisSelected,
                 "var1ID" = var1ID,
                 "var2ID"  = var2ID,
+                "midVar1" = input$midVar1,
+                "midVar2" = input$midVar2,
                 "lowColorVar1" =  input$lowColorVar1,
+                "midColorVar1" =  input$midColorVar1,
                 "highColorVar1" = input$highColorVar1,
                 "lowColorVar2" = input$lowColorVar2,
+                "midColorVar2" =  input$midColorVar2,
                 "highColorVar2" = input$highColorVar2,
                 "paraColor" = input$paraColor,
                 "xSize" = input$xSizeSelect,
@@ -745,9 +757,13 @@ shinyServer(function(input, output, session) {
                     "xAxis" = input$xAxisSelected,
                     "var1ID" = var1ID,
                     "var2ID"  = var2ID,
+                    "midVar1" = input$midVar1,
+                    "midVar2" = input$midVar2,
                     "lowColorVar1" =  input$lowColorVar1,
+                    "midColorVar1" =  input$midColorVar1,
                     "highColorVar1" = input$highColorVar1,
                     "lowColorVar2" = input$lowColorVar2,
+                    "midColorVar2" =  input$midColorVar2,
                     "highColorVar2" = input$highColorVar2,
                     "paraColor" = input$paraColor,
                     "xSize" = input$xSizeSelect,
@@ -913,7 +929,7 @@ shinyServer(function(input, output, session) {
         detailedText = reactive(input$detailedText),
         detailedHeight = reactive(input$detailedHeight)
     )
-    
+
     # * render database links --------------------------------------------------
     output$dbLink <- renderUI({
         info <- pointInfoDetail() # info = seedID, orthoID, var1

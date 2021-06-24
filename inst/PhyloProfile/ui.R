@@ -165,7 +165,7 @@ shinyUI(
                         strong(("Select working taxonomy rank:")),
                         selectInput(
                             "rankSelect", label = "",
-                            choices = getTaxonomyRanks(),
+                            choices = PhyloProfile::getTaxonomyRanks(),
                             selected = "strain"
                         ),
                         uiOutput("totalGeneNumber.ui"),
@@ -416,9 +416,22 @@ shinyUI(
                 value = "#FF8C00"
             ),
             colourpicker::colourInput(
+                "midColorVar1",
+                "Mid variable 1 (dot)",
+                value = "#164294"
+            ),
+            colourpicker::colourInput(
                 "highColorVar1",
                 "High variable 1 (dot)",
-                value = "#3B7EB8"
+                value = "steelblue"
+            ),
+            numericInput(
+                "midVar1",
+                "Mitpoint varriable 1",
+                min = 0,
+                max = 1,
+                step = 0.01,
+                value = 0.5
             ),
             actionButton(
                 "defaultColorVar1",
@@ -429,12 +442,25 @@ shinyUI(
             colourpicker::colourInput(
                 "lowColorVar2",
                 "Low variable 2 (background)",
-                value = "#D1AA77"
+                value = "#CC8D8D"
+            ),
+            colourpicker::colourInput(
+                "midColorVar2",
+                "Mid variable 2 (background)",
+                value = "#FFFFFF"
             ),
             colourpicker::colourInput(
                 "highColorVar2",
                 "High variable 2 (background)",
-                value = "#F2F2F2"
+                value = "#616587"
+            ),
+            numericInput(
+                "midVar2",
+                "Mitpoint varriable 2",
+                min = 0,
+                max = 1,
+                step = 0.01,
+                value = 1
             ),
             actionButton(
                 "defaultColorVar2",
