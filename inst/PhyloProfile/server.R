@@ -12,23 +12,82 @@ options(
 shinyServer(function(input, output, session) {
     # Automatically stop a Shiny app when closing the browser tab
     session$allowReconnect(TRUE)
+    
+    # ========================= DOWNLOAD INPUT FILES  ==========================
+    observe({
+        fileExist <- file.exists("data/ribi.phyloprofile")
+        if (fileExist == FALSE) {
+            msg <- paste0(
+                "Please wait while phyloprofile data are being downloaded!!!"
+            )
+            createAlert(
+                session, "fileExistMsgUI", "fileExistMsg", title = "",
+                content = msg,
+                append = FALSE
+            )
+            download.file(
+                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce.phyloprofile",
+                destfile = "data/ribi.phyloprofile",
+                method = "libcurl"
+            )
+        } else closeAlert(session, "fileExistMsg")
+    })
+    
+    observe({
+        fileExist <- file.exists("data/ribi.fasta")
+        if (fileExist == FALSE) {
+            msg <- paste0(
+                "Please wait while fasta data are being downloaded!!!"
+            )
+            createAlert(
+                session, "fileExistMsgUI", "fileExistMsg", title = "",
+                content = msg,
+                append = FALSE
+            )
+            download.file(
+                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce.extended.fa",
+                destfile = "data/ribi.fasta",
+                method = "libcurl"
+            )
+        } else closeAlert(session, "fileExistMsg")
+    })
+    
+    observe({
+        fileExist <- file.exists("data/ribi.domains")
+        if (fileExist == FALSE) {
+            msg <- paste0(
+                "Please wait while domain data are being downloaded!!!"
+            )
+            createAlert(
+                session, "fileExistMsgUI", "fileExistMsg", title = "",
+                content = msg,
+                append = FALSE
+            )
+            download.file(
+                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce_forward.domains",
+                destfile = "data/ribi.domains",
+                method = "libcurl"
+            )
+        } else closeAlert(session, "fileExistMsg")
+    })
+    
 
     # ========================= INITIAL PARAMETERS  ============================
-    mainInput <- "ribi/ribi.phyloprofile"
+    mainInput <- "data/ribi.phyloprofile"
     var1ID <- "FAS_F"
     var2ID <- "FAS_B"
     getRefspec <- function(rankSelect) {
         ribiDf <- data.frame(
             "name" = c(
-                "SARS-CoV-2_GCF_009858895.2",
-                "SARS-CoV-2_GCF_009858895.2",
-                "SARS-CoV-2_GCF_009858895.2",
-                "Coronaviridae",
-                "Nidovirales",
-                "Pisoniviricetes",
-                "Pisuviricota",
-                "Orthornavirae",
-                "Viruses"
+                "Saccharomyces cerevisiae S288C",
+                "Saccharomyces cerevisiae",
+                "Saccharomyces",
+                "Saccharomycetaceae",
+                "Saccharomycetales",
+                "Saccharomycetes",
+                "Ascomycota",
+                "Fungi",
+                "Eukaryota"
             ),
             "rank" = c(
                 "strain",
@@ -49,7 +108,7 @@ shinyServer(function(input, output, session) {
     var2AggregateBy <- "max"
     var1Relation <- "protein"
     var2Relation <- "protein"
-
+    
     # =========================== RENDER FILTER SLIDEBARS ======================
 
     # * render filter slidebars for Main plot ----------------------------------
@@ -166,10 +225,11 @@ shinyServer(function(input, output, session) {
     # * convert main input file in any format into long format dataframe -------
     getMainInput <- reactive({
         withProgress(message = 'Reading main input...', value = 0.5, {
-            inFile <- system.file(
-                "extdata", "ribi/ribi.phyloprofile",
-                package="PhyloProfileRibi"
-            )
+            # inFile <- system.file(
+            #     "extdata", "ribi/ribi.phyloprofile",
+            #     package="PhyloProfileRibi"
+            # )
+            inFile <- "data/ribi.phyloprofile"
             longDataframe <- createLongMatrix(inFile)
 
             # convert geneID, ncbiID and orthoID into factor and
@@ -202,10 +262,11 @@ shinyServer(function(input, output, session) {
     # * parse domain info into data frame --------------------------------------
     getDomainInformation <- reactive({
         withProgress(message = 'Reading domain input...', value = 0.5, {
-            domainFile <- system.file(
-                "extdata", "ribi/ribi.domains",
-                package="PhyloProfileRibi"
-            )
+            domainFile <- "data/ribi.domains"
+            # domainFile <- system.file(
+            #     "extdata", "ribi/ribi.domains",
+            #     package="PhyloProfileRibi"
+            # )
             domainDf <- parseDomainInput(NULL, domainFile, "file")
             return(domainDf)
         })
@@ -981,10 +1042,11 @@ shinyServer(function(input, output, session) {
         info <- pointInfoDetail() # info = seedID, orthoID, var1
         req(info)
         seqID <- toString(info[2])
-        fastain <- system.file(
-            "extdata", "ribi/ribi.fasta",
-            package="PhyloProfileRibi"
-        )
+        fastain <- "data/ribi.fasta"
+        # fastain <- system.file(
+        #     "extdata", "ribi/ribi.fasta",
+        #     package="PhyloProfileRibi"
+        # )
         fastaOut <- getFastaFromFile(seqID, fastain)
         return(paste(fastaOut[1]))
     })
@@ -1009,10 +1071,11 @@ shinyServer(function(input, output, session) {
     mainFastaDownload <- reactive({
         downloadDf <- as.data.frame(downloadData())
         seqIDs <- downloadDf$orthoID
-        fastain <- system.file(
-            "extdata", "ribi/ribi.fasta",
-            package="PhyloProfileRibi"
-        )
+        fastain <- "data/ribi.fasta"
+        # fastain <- system.file(
+        #     "extdata", "ribi/ribi.fasta",
+        #     package="PhyloProfileRibi"
+        # )
         mainFastaOut <- getFastaFromFile(seqIDs, fastain)
         return(mainFastaOut)
     })
@@ -1034,10 +1097,11 @@ shinyServer(function(input, output, session) {
     customizedFastaDownload <- reactive({
         downloadDf <- as.data.frame(downloadCustomData())
         seqIDs <- downloadDf$orthoID
-        fastain <- system.file(
-            "extdata", "ribi/ribi.fasta",
-            package="PhyloProfileRibi"
-        )
+        fastain <- "data/ribi.fasta"
+        # fastain <- system.file(
+        #     "extdata", "ribi/ribi.fasta",
+        #     package="PhyloProfileRibi"
+        # )
         fastaOutDf <- getFastaFromFile(seqIDs, fastain)
         return(fastaOutDf)
     })
