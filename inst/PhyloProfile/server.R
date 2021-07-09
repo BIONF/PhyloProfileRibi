@@ -227,7 +227,7 @@ shinyServer(function(input, output, session) {
         withProgress(message = 'Reading main input...', value = 0.5, {
             # inFile <- system.file(
             #     "extdata", "ribi/ribi.phyloprofile",
-            #     package="PhyloProfileRibi"
+            #     package="PhyloRBF"
             # )
             inFile <- "data/ribi.phyloprofile"
             longDataframe <- createLongMatrix(inFile)
@@ -265,7 +265,7 @@ shinyServer(function(input, output, session) {
             domainFile <- "data/ribi.domains"
             # domainFile <- system.file(
             #     "extdata", "ribi/ribi.domains",
-            #     package="PhyloProfileRibi"
+            #     package="PhyloRBF"
             # )
             domainDf <- parseDomainInput(NULL, domainFile, "file")
             return(domainDf)
@@ -286,7 +286,7 @@ shinyServer(function(input, output, session) {
         req(getMainInput())
         if (input$rankSelect == "") return()
         withProgress(message = 'Getting input taxon names...', value = 0.5, {
-            inputTaxaName <- PhyloProfileRibi::getInputTaxaNameCr(
+            inputTaxaName <- PhyloRBF::getInputTaxaNameCr(
               input$rankSelect, inputTaxonID()
             )
             return(inputTaxaName)
@@ -299,12 +299,12 @@ shinyServer(function(input, output, session) {
             # get input taxonomy tree
             # treeIn <- system.file(
             #     "extdata", "ribi/ribi.nwk",
-            #     package="PhyloProfileRibi"
+            #     package="PhyloRBF"
             # )
             # inputTaxaTree <- read.tree(file = treeIn)
 
             # sort taxonomy matrix based on selected refTaxon
-            sortedOut <- PhyloProfileRibi::sortInputTaxaCr(
+            sortedOut <- PhyloRBF::sortInputTaxaCr(
                 taxonIDs = inputTaxonID(),
                 rankName = input$rankSelect,
                 refTaxon = getRefspec(input$rankSelect),
@@ -1045,7 +1045,7 @@ shinyServer(function(input, output, session) {
         fastain <- "data/ribi.fasta"
         # fastain <- system.file(
         #     "extdata", "ribi/ribi.fasta",
-        #     package="PhyloProfileRibi"
+        #     package="PhyloRBF"
         # )
         fastaOut <- getFastaFromFile(seqID, fastain)
         return(paste(fastaOut[1]))
@@ -1074,7 +1074,7 @@ shinyServer(function(input, output, session) {
         fastain <- "data/ribi.fasta"
         # fastain <- system.file(
         #     "extdata", "ribi/ribi.fasta",
-        #     package="PhyloProfileRibi"
+        #     package="PhyloRBF"
         # )
         mainFastaOut <- getFastaFromFile(seqIDs, fastain)
         return(mainFastaOut)
@@ -1100,7 +1100,7 @@ shinyServer(function(input, output, session) {
         fastain <- "data/ribi.fasta"
         # fastain <- system.file(
         #     "extdata", "ribi/ribi.fasta",
-        #     package="PhyloProfileRibi"
+        #     package="PhyloRBF"
         # )
         fastaOutDf <- getFastaFromFile(seqIDs, fastain)
         return(fastaOutDf)

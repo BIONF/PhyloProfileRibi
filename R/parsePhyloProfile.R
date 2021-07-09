@@ -8,7 +8,7 @@
 
 getNameListCr <- function() {
     nameReducedFile <- paste(
-        system.file(package="PhyloProfileRibi"),
+        system.file(package="PhyloRBF"),
         "PhyloProfile/data/taxonNamesReduced.txt",
         sep="/"
     )
@@ -41,7 +41,7 @@ getNameListCr <- function() {
 
 getTaxonomyMatrixCr <- function(subsetTaxaCheck = FALSE, taxonIDs = NULL){
     taxonomyMatrixFile <- paste(
-        system.file(package="PhyloProfileRibi"),
+        system.file(package="PhyloRBF"),
         "PhyloProfile/data/taxonomyMatrix.txt",
         sep="/"
     )

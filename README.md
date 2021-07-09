@@ -1,6 +1,6 @@
-# PhyloProfileRibi
+# PhyloRBF
 
-The data of PhyloProfile Ribosome Biogenesis is displayed for an interactive exploration of the [feature-aware phylogenetic profile of ???](https://applbio.biologie.uni-frankfurt.de/phyloprofileribi/).
+The data of PhyloProfile Ribosome Biogenesis is displayed for an interactive exploration of the [feature-aware phylogenetic profile of ???](https://applbio.biologie.uni-frankfurt.de/PhyloRBF/).
 This is a lite version of [PhyloProfile](https://github.com/BIONF/PhyloProfile), which is pre-configured only for its use with the [Ribosome biogenesis data](https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/).
 
 # Table of Contents
@@ -21,10 +21,10 @@ Feature-aware phylogenetic profile of the yeast ribosome biogenesis genes across
 * For further details on the biological interpretation of the data, please refer to the article [DO WE HAVE A LINK SOMEWHERE](https://www.biorxiv.org/content/10.1101/2021.01.29.428808v2).
 
 # Bugs
-Any bug reports or comments, suggestions are highly appreciated. Please [open an issue on GitHub](https://github.com/BIONF/PhyloProfileRibi/issues/new) or be in touch via email.
+Any bug reports or comments, suggestions are highly appreciated. Please [open an issue on GitHub](https://github.com/BIONF/PhyloRBF/issues/new) or be in touch via email.
 
 # License
-This tool is released under [MIT license](https://github.com/BIONF/PhyloProfileRibi/blob/master/LICENSE).
+This tool is released under [MIT license](https://github.com/BIONF/PhyloRBF/blob/master/LICENSE).
 
 # Contact
 Ingo Ebersberger

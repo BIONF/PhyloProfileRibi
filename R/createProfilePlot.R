@@ -38,7 +38,7 @@ highlightProfilePlotCr <- function(
     if (taxonHighlight != "none") {
         # get selected highlight taxon ID
         nameReducedFile <- paste(
-            system.file(package = "PhyloProfileRibi"),
+            system.file(package = "PhyloRBF"),
             "PhyloProfile/data/taxonNamesReduced.txt", sep="/")
         if (!file.exists(nameReducedFile)) {
             taxonNamesReduced <- NULL

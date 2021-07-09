@@ -10,7 +10,7 @@ shinyUI(
         useShinyjs(),
 
         # Application title
-        titlePanel("", windowTitle = "PhyloProfileRibi"),
+        titlePanel("", windowTitle = "PhyloRBF"),
 
         # TOP WELLPANEL FOR PLOT CONFIGURATION ---------------------------------
         conditionalPanel(
@@ -149,7 +149,7 @@ shinyUI(
 
         # MAIN NARVARPAGE TABS -------------------------------------------------
         navbarPage(
-            em(strong("PhyloProfile Ribosome Biogenesis")),
+            em(strong("PhyloRBF")),
             id = "tabs",
             collapsible = TRUE,
             inverse = TRUE,
@@ -326,7 +326,7 @@ shinyUI(
                 tabPanel(
                     a(
                         "About",
-                        href = "https://BIONF.github.io/PhyloProfileRibi/",
+                        href = "https://BIONF.github.io/PhyloRBF/",
                         target = "_blank"
                     )
                 )

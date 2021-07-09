@@ -67,7 +67,7 @@ createProfilePlot <- function(input, output, session,
             if (inSeq()[1] == "all" & inTaxa()[1] == "all") return()
         }
         withProgress(message = 'PLOTTING...', value = 0.5, {
-            PhyloProfileRibi::highlightProfilePlotCr(
+            PhyloRBF::highlightProfilePlotCr(
                 dataHeat(),
                 parameters(),
                 taxonHighlight(),
@@ -103,7 +103,7 @@ createProfilePlot <- function(input, output, session,
         content = function(file) {
             ggsave(
                 file,
-                plot = PhyloProfileRibi::highlightProfilePlotCr(
+                plot = PhyloRBF::highlightProfilePlotCr(
                     dataHeat(), parameters(), "none", rankSelect(), "none"
                 ),
 
@@ -116,7 +116,7 @@ createProfilePlot <- function(input, output, session,
     # get info of clicked point on heatmap plot --------------------------------
     selectedpointInfo <- reactive({
         # get selected supertaxon name
-        taxaList <- PhyloProfileRibi::getNameListCr()
+        taxaList <- PhyloRBF::getNameListCr()
         rankName <- rankSelect()
         inSelect <- taxaList$ncbiID[taxaList$fullName == inSelect()]
 

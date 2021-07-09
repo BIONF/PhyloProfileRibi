@@ -9,11 +9,11 @@
 #' @rawNamespace import(RCurl, except = reset)
 #' @rawNamespace import(shinyjs, except = colourInput)
 
-runPhyloProfileRibi <- function(){
-    appDir <- system.file("PhyloProfile", package = "PhyloProfileRibi")
+runPhyloRBF <- function(){
+    appDir <- system.file("PhyloProfile", package = "PhyloRBF")
     if (appDir == "") {
         stop(
-            "Could not find apps directory. Try re-installing `PhyloProfileRibi`.",
+            "Could not find apps directory. Try re-installing `PhyloRBF`.",
             call = FALSE
         )
     }
