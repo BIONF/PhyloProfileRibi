@@ -63,11 +63,14 @@ shinyServer(function(input, output, session) {
                 content = msg,
                 append = FALSE
             )
-            download.file(
-                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce_forward.domains",
-                destfile = "data/ribi.domains",
-                method = "libcurl"
-            )
+            # download.file(
+            #     "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce_forward.domains",
+            #     destfile = "data/ribi.domains",
+            #     method = "libcurl"
+            # )
+            print("Extracting domain files...")
+            untar("data/domains.tar.gz", exdir = "data/domains")
+            print("Done!")
         } else closeAlert(session, "fileExistMsg")
     })
     
@@ -262,12 +265,17 @@ shinyServer(function(input, output, session) {
     # * parse domain info into data frame --------------------------------------
     getDomainInformation <- reactive({
         withProgress(message = 'Reading domain input...', value = 0.5, {
-            domainFile <- "data/ribi.domains"
-            # domainFile <- system.file(
-            #     "extdata", "ribi/ribi.domains",
-            #     package="PhyloRBF"
-            # )
-            domainDf <- parseDomainInput(NULL, domainFile, "file")
+            if (input$tabs == "Main profile") {
+                # info = groupID,orthoID,supertaxon,mVar1,%spec,var2
+                info <- mainpointInfo()
+            } else if (input$tabs == "Customized profile") {
+                info <- selectedpointInfo()
+            }
+            domainDf <- parseDomainInput(
+                info[1],
+                "data/domains/", #input$domainPath,
+                "folder"
+            )
             return(domainDf)
         })
     })

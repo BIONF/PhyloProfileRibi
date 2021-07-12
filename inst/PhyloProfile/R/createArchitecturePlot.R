@@ -157,20 +157,23 @@ getDomainLink <- function(info, domainDf){
     }
     # get URL
     feature <- unique(feature[grep("pfam|smart", feature)])
-    feature <- sub("_","@", feature)
-    tmpDf <- data.frame(
-        do.call('cbind', data.table::tstrsplit(as.character(feature), '@', fixed = TRUE))
-    )
-    featDf <- data.frame("ID" = levels(as.factor(tmpDf$X2)))
-    featDf$PFAM <- paste0(
-        "<a href='https://pfam.xfam.org/family/", featDf$ID, 
-        "' target='_blank'>", featDf$ID, "</a>"
-    )
-    featDf$SMART <- paste0(
-        "<a href='http://smart.embl-heidelberg.de/smart/", 
-        "do_annotation.pl?BLAST=DUMMY&DOMAIN=", 
-        featDf$ID, "' target='_blank'>",
-        featDf$ID, "</a>"
-    )
+    featDf <- NULL
+    if (length(feature) > 0) {
+        feature <- sub("_","@", feature)
+        tmpDf <- data.frame(
+            do.call('cbind', data.table::tstrsplit(as.character(feature), '@', fixed = TRUE))
+        )
+        featDf <- data.frame("ID" = levels(as.factor(tmpDf$X2)))
+        featDf$PFAM <- paste0(
+            "<a href='https://pfam.xfam.org/family/", featDf$ID, 
+            "' target='_blank'>", featDf$ID, "</a>"
+        )
+        featDf$SMART <- paste0(
+            "<a href='http://smart.embl-heidelberg.de/smart/", 
+            "do_annotation.pl?BLAST=DUMMY&DOMAIN=", 
+            featDf$ID, "' target='_blank'>",
+            featDf$ID, "</a>"
+        )
+    }
     return(featDf)
 }
