@@ -30,26 +30,26 @@ shinyUI(
                         checkboxInput(
                             "autoUpdate",
                             strong(em("Auto update plot")),
-                            value = TRUE,
+                            value = FALSE,
                             width = NULL
                         ),
                         checkboxInput(
                             "autoSizing",
                             strong(em("Auto sizing")),
-                            value = TRUE,
+                            value = FALSE,
                             width = NULL
                         )
                     ),
                     column(
                         1,
-                        createPlotSize("width", "Width (px)", 1600),
+                        createPlotSize("width", "Width (px)", 26876),
                         actionButton(
                             "setColor", "Change colors",
                             style = "padding:4px; font-size:100%"
                         )
                     ),
                     column(
-                        1, createPlotSize("height", "Height (px)", 750),
+                        1, createPlotSize("height", "Height (px)", 4136),
                         actionButton("mainPlotConfig", "Appearance")
                     ),
                     column(
@@ -166,63 +166,44 @@ shinyUI(
                         selectInput(
                             "rankSelect", label = "",
                             choices = PhyloProfile::getTaxonomyRanks(),
-                            selected = "strain"
+                            selected = "species"
                         ),
                         uiOutput("totalGeneNumber.ui"),
-
-                        column(
-                            4,
-                            numericInput(
-                                "stIndex",
-                                "Show from:",
-                                min = 1,
-                                max = 1600,
-                                value = 1,
-                                width = 100
-                            ),
-                            style = "padding:0px;"
-                        ),
-
-                        column(
-                            4,
-                            numericInput(
-                                "endIndex",
-                                "...to:",
-                                min = 1,
-                                max = 1600,
-                                value = 1000,
-                                width = 100
-                            ),
-                            style = "padding:0px;"
-                        ),
-
-                        column(
-                            4, uiOutput("highlightGeneUI")
-                        ),
-
+                        uiOutput("highlightGeneUI"),
                         bsPopover(
                             "highlightGeneUI",
                             "",
                             "Select gene to highlight",
                             "bottom"
                         ),
-
-                        bsPopover(
-                            "stIndex",
-                            "",
-                            "Set start index for sequence range",
-                            "bottom"
-                        ),
-
-                        bsPopover(
-                            "endIndex",
-                            "",
-                            "Set end index for sequence range",
-                            "bottom"
-                        ),
-
                         br(),
                         uiOutput("highlightTaxonUI"),
+                        
+                        # column(
+                        #     4,
+                        #     numericInput(
+                        #         "stIndex",
+                        #         "Show from:",
+                        #         min = 1,
+                        #         max = 1600,
+                        #         value = 1,
+                        #         width = 100
+                        #     ),
+                        #     style = "padding:0px;"
+                        # ),
+                        # 
+                        # column(
+                        #     4,
+                        #     numericInput(
+                        #         "endIndex",
+                        #         "...to:",
+                        #         min = 1,
+                        #         max = 1600,
+                        #         value = 1000,
+                        #         width = 100
+                        #     ),
+                        #     style = "padding:0px;"
+                        # ),
 
                         conditionalPanel(
                             condition = "input.autoUpdate == false",
@@ -232,7 +213,19 @@ shinyUI(
                                 style = "warning",
                                 icon("refresh")
                             )
-                        )
+                            # ,
+                            # bsPopover(
+                            #     "updateBtn",
+                            #     "",
+                            #     paste0(
+                            #         "Due to the large amount of data, it will ",
+                            #         "take a while for plotting!"
+                            #     ),
+                            #     "bottom"
+                            # )
+                        ),
+                        br(),
+                        uiOutput("warningMsg")
                     ),
                     # * main panel for profile plot ----------------------------
                     mainPanel(

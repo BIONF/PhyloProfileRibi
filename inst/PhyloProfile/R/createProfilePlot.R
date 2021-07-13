@@ -30,8 +30,6 @@ createProfilePlotUI <- function(id) {
 
 createProfilePlot <- function(input, output, session,
                                 data,
-                              # clusteredDataHeat,
-                                # applyCluster,
                                 parameters,
                                 inSeq, inTaxa,
                                 rankSelect, inSelect,
@@ -45,16 +43,8 @@ createProfilePlot <- function(input, output, session,
         if (typeProfile() == "customizedProfile") {
             if (is.null(inTaxa()) | is.null(inSeq())) return()
             dataHeat <- dataCustomizedPlot(data(), inTaxa(), inSeq())
-            # if (applyCluster() == TRUE) {
-                # dataHeat <- dataCustomizedPlot(
-                #     clusteredDataHeat(), inTaxa(), inSeq()
-                # )
-            # }
         } else {
             dataHeat <- dataMainPlot(data())
-            # if (applyCluster() == TRUE) {
-                # dataHeat <- dataMainPlot(clusteredDataHeat())
-            # }
         }
         return(dataHeat)
     })

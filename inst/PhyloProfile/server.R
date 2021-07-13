@@ -14,24 +14,24 @@ shinyServer(function(input, output, session) {
     session$allowReconnect(TRUE)
     
     # ========================= DOWNLOAD INPUT FILES  ==========================
-    observe({
-        fileExist <- file.exists("data/ribi.phyloprofile")
-        if (fileExist == FALSE) {
-            msg <- paste0(
-                "Please wait while phyloprofile data are being downloaded!!!"
-            )
-            createAlert(
-                session, "fileExistMsgUI", "fileExistMsg", title = "",
-                content = msg,
-                append = FALSE
-            )
-            download.file(
-                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce.phyloprofile",
-                destfile = "data/ribi.phyloprofile",
-                method = "libcurl"
-            )
-        } else closeAlert(session, "fileExistMsg")
-    })
+    # observe({
+    #     fileExist <- file.exists("data/ribi.phyloprofile")
+    #     if (fileExist == FALSE) {
+    #         msg <- paste0(
+    #             "Please wait while phyloprofile data are being downloaded!!!"
+    #         )
+    #         createAlert(
+    #             session, "fileExistMsgUI", "fileExistMsg", title = "",
+    #             content = msg,
+    #             append = FALSE
+    #         )
+    #         download.file(
+    #             "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce.phyloprofile",
+    #             destfile = "data/ribi.phyloprofile",
+    #             method = "libcurl"
+    #         )
+    #     } else closeAlert(session, "fileExistMsg")
+    # })
     
     observe({
         fileExist <- file.exists("data/ribi.fasta")
@@ -45,7 +45,7 @@ shinyServer(function(input, output, session) {
                 append = FALSE
             )
             download.file(
-                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce.extended.fa",
+                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PhyloRBF/rbf.fasta",
                 destfile = "data/ribi.fasta",
                 method = "libcurl"
             )
@@ -53,7 +53,7 @@ shinyServer(function(input, output, session) {
     })
     
     observe({
-        fileExist <- file.exists("data/ribi.domains")
+        fileExist <- dir.exists("data/domains")
         if (fileExist == FALSE) {
             msg <- paste0(
                 "Please wait while domain data are being downloaded!!!"
@@ -63,15 +63,48 @@ shinyServer(function(input, output, session) {
                 content = msg,
                 append = FALSE
             )
-            # download.file(
-            #     "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PP_RibosomeBiogenesis/FINAL_297_HsaSce_forward.domains",
-            #     destfile = "data/ribi.domains",
-            #     method = "libcurl"
-            # )
+            download.file(
+                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PhyloRBF/domains.tar.gz",
+                destfile = "data/domains.tar.gz",
+                method = "libcurl"
+            )
             print("Extracting domain files...")
             untar("data/domains.tar.gz", exdir = "data/domains")
+            file.remove("data/domains.tar.gz")
             print("Done!")
         } else closeAlert(session, "fileExistMsg")
+    })
+    
+    observe({
+        fileExist <- file.exists("data/filteredDf.rds")
+        if (fileExist == FALSE) {
+            msg <- paste0(
+                "Please wait while RDS data are being downloaded!!!"
+            )
+            createAlert(
+                session, "fileExistMsgUI", "fileExistMsg", title = "",
+                content = msg,
+                append = FALSE
+            )
+            download.file(
+                "https://applbio.biologie.uni-frankfurt.de/download/RibosomeBiogenesis/PhyloRBF/rds.tar.gz",
+                destfile = "data/rds.tar.gz",
+                method = "libcurl"
+            )
+            print("Extracting rds files...")
+            untar("data/rds.tar.gz", exdir = "data")
+            file.remove("data/rds.tar.gz")
+            print("Done!")
+        } else closeAlert(session, "fileExistMsg")
+    })
+    
+    output$warningMsg <- renderUI({
+        msg <- paste(
+            "<p><span style=\"color: #ff0000;\"><em><strong>Due to the large",
+            "amount of data, it could take a while for rendering the plot!",
+            "</strong></em></span></p>"
+        )
+        HTML(msg)
     })
     
 
@@ -228,36 +261,38 @@ shinyServer(function(input, output, session) {
     # * convert main input file in any format into long format dataframe -------
     getMainInput <- reactive({
         withProgress(message = 'Reading main input...', value = 0.5, {
-            # inFile <- system.file(
-            #     "extdata", "ribi/ribi.phyloprofile",
-            #     package="PhyloRBF"
-            # )
-            inFile <- "data/ribi.phyloprofile"
-            longDataframe <- createLongMatrix(inFile)
-
-            # convert geneID, ncbiID and orthoID into factor and
-            # var1, var2 into numeric
-            for (i in seq_len(3)) {
-                longDataframe[, i] <- as.factor(longDataframe[, i])
-            }
-            if (ncol(longDataframe) > 3) {
-                for (j in seq(4, ncol(longDataframe))){
-                    longDataframe[,j] <- suppressWarnings(
-                        as.numeric(as.character(longDataframe[,j]))
-                    )
-                }
-            }
-
-            # remove duplicated lines
-            longDataframe <- longDataframe[!duplicated(longDataframe),]
-            # update number of genes to plot based on input
-            if (nlevels(as.factor(longDataframe$geneID)) <= 1500) {
-                updateNumericInput(
-                    session,
-                    "endIndex", value = nlevels(as.factor(longDataframe$geneID))
-                )
-            }
-            # return
+            # # inFile <- system.file(
+            # #     "extdata", "ribi/ribi.phyloprofile",
+            # #     package="PhyloRBF"
+            # # )
+            # inFile <- "data/ribi.phyloprofile"
+            # longDataframe <- createLongMatrix(inFile)
+            # 
+            # # convert geneID, ncbiID and orthoID into factor and
+            # # var1, var2 into numeric
+            # for (i in seq_len(3)) {
+            #     longDataframe[, i] <- as.factor(longDataframe[, i])
+            # }
+            # if (ncol(longDataframe) > 3) {
+            #     for (j in seq(4, ncol(longDataframe))){
+            #         longDataframe[,j] <- suppressWarnings(
+            #             as.numeric(as.character(longDataframe[,j]))
+            #         )
+            #     }
+            # }
+            # 
+            # # remove duplicated lines
+            # longDataframe <- longDataframe[!duplicated(longDataframe),]
+            # # update number of genes to plot based on input
+            # if (nlevels(as.factor(longDataframe$geneID)) <= 1500) {
+            #     updateNumericInput(
+            #         session,
+            #         "endIndex", value = nlevels(as.factor(longDataframe$geneID))
+            #     )
+            # }
+            # # return
+            # saveRDS(longDataframe, file = "data/mainInput.rds")
+            longDataframe <- readRDS("data/mainInput.rds")
             return(longDataframe)
         })
     })
@@ -303,24 +338,27 @@ shinyServer(function(input, output, session) {
 
     # * sort taxonomy data of input taxa ---------------------------------------
     sortedtaxaList <- reactive({
-        withProgress(message = 'Sorting input taxa...', value = 0.5, {
-            # get input taxonomy tree
-            # treeIn <- system.file(
-            #     "extdata", "ribi/ribi.nwk",
-            #     package="PhyloRBF"
-            # )
-            # inputTaxaTree <- read.tree(file = treeIn)
-
-            # sort taxonomy matrix based on selected refTaxon
-            sortedOut <- PhyloRBF::sortInputTaxaCr(
-                taxonIDs = inputTaxonID(),
-                rankName = input$rankSelect,
-                refTaxon = getRefspec(input$rankSelect),
-                taxaTree = NULL #inputTaxaTree
-            )
-            # return
-            return(sortedOut)
-        })
+        # withProgress(message = 'Sorting input taxa...', value = 0.5, {
+        #     # get input taxonomy tree
+        #     # treeIn <- system.file(
+        #     #     "extdata", "ribi/ribi.nwk",
+        #     #     package="PhyloRBF"
+        #     # )
+        #     # inputTaxaTree <- read.tree(file = treeIn)
+        # 
+        #     # sort taxonomy matrix based on selected refTaxon
+        #     sortedOut <- PhyloRBF::sortInputTaxaCr(
+        #         taxonIDs = inputTaxonID(),
+        #         rankName = input$rankSelect,
+        #         refTaxon = getRefspec(input$rankSelect),
+        #         taxaTree = NULL #inputTaxaTree
+        #     )
+        #     # return
+        #     saveRDS(sortedOut, file = "data/sortedInputTaxa.rds")
+        #     return(sortedOut)
+        # })
+        sortedOut <- readRDS("data/sortedInputTaxa.rds")
+        return(sortedOut)
     })
 
     # * count taxa for each supertaxon -----------------------------------------
@@ -330,73 +368,81 @@ shinyServer(function(input, output, session) {
     })
 
     # * get subset data for plotting (default 30 genes if > 50 genes) ----------
-    preData <- reactive({
-        longDataframe <- getMainInput()
-        req(longDataframe)
-        # isolate start and end gene index
-        input$updateBtn
-        if (input$autoUpdate == TRUE) {
-            startIndex <- input$stIndex
-            endIndex <- input$endIndex
-        } else {
-            startIndex <- isolate(input$stIndex)
-            endIndex <- isolate(input$endIndex)
-        }
-
-        if (is.na(endIndex)) endIndex <- 1000
-
-        withProgress(message = 'Subseting data...', value = 0.5, {
-            longDataframe <- unsortID(longDataframe, FALSE)
-            listIn <- input$list
-            if (!is.null(listIn)) {
-                list <- read.table(file = listIn$datapath, header = FALSE)
-                listGeneOri <- list$V1
-                if (startIndex <= length(listGeneOri)) {
-                    listGene <- listGeneOri[listGeneOri[startIndex:endIndex]]
-                } else listGene <- listGeneOri
-                data <- longDataframe[longDataframe$geneID %in% listGene, ]
-            } else {
-                subsetID <-
-                    levels(longDataframe$geneID)[startIndex:endIndex]
-                data <- longDataframe[longDataframe$geneID %in% subsetID, ]
-            }
-
-            if (ncol(data) < 5) {
-                for (i in seq_len(5 - ncol(data))) {
-                    data[paste0("newVar", i)] <- 1
-                }
-            }
-
-            # return preData
-            if (nrow(data) == 0) return()
-            colnames(data) <- c("geneID", "ncbiID", "orthoID", "var1", "var2")
-            return(data)
-        })
-    })
+    # preData <- reactive({
+    #     longDataframe <- getMainInput()
+    #     req(longDataframe)
+    #     # isolate start and end gene index
+    #     input$updateBtn
+    #     # if (input$autoUpdate == TRUE) {
+    #     #     startIndex <- input$stIndex
+    #     #     endIndex <- input$endIndex
+    #     # } else {
+    #     #     startIndex <- isolate(input$stIndex)
+    #     #     endIndex <- isolate(input$endIndex)
+    #     # }
+    #     #
+    #     # if (is.na(endIndex)) endIndex <- 1000
+    #     startIndex <- 1
+    #     endIndex <- nlevels(as.factor(longDataframe$geneID))
+    #     withProgress(message = 'Subseting data...', value = 0.5, {
+    #         longDataframe <- unsortID(longDataframe, FALSE)
+    #         print(as.factor(longDataframe$geneID))
+    #         listIn <- input$list
+    #         if (!is.null(listIn)) {
+    #             list <- read.table(file = listIn$datapath, header = FALSE)
+    #             listGeneOri <- list$V1
+    #             if (startIndex <= length(listGeneOri)) {
+    #                 listGene <- listGeneOri[listGeneOri[startIndex:endIndex]]
+    #             } else listGene <- listGeneOri
+    #             data <- longDataframe[longDataframe$geneID %in% listGene, ]
+    #         } else {
+    #             subsetID <-
+    #                 levels(longDataframe$geneID)[startIndex:endIndex]
+    #             data <- longDataframe[longDataframe$geneID %in% subsetID, ]
+    #         }
+    # 
+    #         if (ncol(data) < 5) {
+    #             for (i in seq_len(5 - ncol(data))) {
+    #                 data[paste0("newVar", i)] <- 1
+    #             }
+    #         }
+    # 
+    #         # return preData
+    #         if (nrow(data) == 0) return()
+    #         colnames(data) <- c("geneID", "ncbiID", "orthoID", "var1", "var2")
+    #         return(data)
+    #     })
+    # })
 
     # * creating main dataframe for subset taxa (in species/strain level) ------
     getFullData <- reactive({
-        req(preData())
+        # req(preData())
         req(getCountTaxa())
         req(sortedtaxaList())
-        {
-            input$plotCustom
-            input$updateBtn
-        }
-        withProgress(message = 'Parsing profile data...', value = 0.5, {
-            if (input$autoUpdate == TRUE) {
-                coorthologCutoffMax <- input$coortholog
-            } else {
-                coorthologCutoffMax <- isolate(input$coortholog)
-            }
-            fullMdData <- parseInfoProfile(
-                inputDf = preData(),
-                sortedInputTaxa = sortedtaxaList(),
-                taxaCount = getCountTaxa(),
-                coorthoCOMax = coorthologCutoffMax
-            )
-            return(fullMdData)
-        })
+        # {
+        #     input$plotCustom
+        #     input$updateBtn
+        # }
+        # withProgress(message = 'Parsing profile data...', value = 0.5, {
+        #     if (input$autoUpdate == TRUE) {
+        #         coorthologCutoffMax <- input$coortholog
+        #     } else {
+        #         coorthologCutoffMax <- isolate(input$coortholog)
+        #     }
+        #     fullMdData <- parseInfoProfile(
+        #         inputDf = preData(),
+        #         sortedInputTaxa = sortedtaxaList(),
+        #         taxaCount = getCountTaxa(),
+        #         coorthoCOMax = coorthologCutoffMax
+        #     )
+        #     saveRDS(fullMdData, file = "data/fullMdData.rds")
+        #     return(fullMdData)
+        # })
+        fullMdData <- readRDS("data/fullMdData.rds")
+        # fullMdData$geneID <- factor(
+        #     fullMdData$geneID, levels = unique(fullMdData$geneID)
+        # )
+        return(fullMdData)
     })
 
     # * filter full data -------------------------------------------------------
@@ -423,31 +469,44 @@ shinyServer(function(input, output, session) {
                 var2Cutoff <- isolate(input$var2)
                 colorByGroup <- FALSE #isolate(input$colorByGroup)
             }
-
-            # get selected supertaxon name
-            split <- strsplit(as.character(getRefspec(input$rankSelect)), "_")
-            inSelect <- as.character(split[[1]][1])
-
-            # get gene categories
-            inputCatDt <- NULL
-
-            # create data for heatmap plotting
-            filteredDf <- filterProfileData(
-                DF = getFullData(),
-                taxaCount = getCountTaxa(),
-                refTaxon = inSelect,
-                percentCutoff,
-                coorthologCutoffMax,
-                var1Cutoff,
-                var2Cutoff,
-                var1Relation,
-                var2Relation,
-                groupByCat = colorByGroup,
-                catDt = inputCatDt,
-                var1AggregateBy = var1AggregateBy,
-                var2AggregateBy = var2AggregateBy
-            )
-            return(filteredDf)
+            
+            if (
+                (is.null(var1Cutoff) && is.null(var2Cutoff) &&
+                is.null(percentCutoff) && coorthologCutoffMax == 999) ||
+                (var1Cutoff[1] == 0.0 && var1Cutoff[2] == 1.0 &&
+                var2Cutoff[1] == 0.0 && var2Cutoff[2] == 1.0 &&
+                percentCutoff[1] == 0.0 && percentCutoff[2] == 1.0 &&
+                coorthologCutoffMax == 999)
+            ) {
+                filteredDf <- readRDS("data/filteredDf.rds")
+                return(filteredDf)
+            } else {
+                # get selected supertaxon name
+                split <- strsplit(as.character(getRefspec(input$rankSelect)), "_")
+                inSelect <- as.character(split[[1]][1])
+                
+                # get gene categories
+                inputCatDt <- NULL
+                
+                # create data for heatmap plotting
+                filteredDf <- filterProfileData(
+                    DF = getFullData(),
+                    taxaCount = getCountTaxa(),
+                    refTaxon = inSelect,
+                    percentCutoff,
+                    coorthologCutoffMax,
+                    var1Cutoff,
+                    var2Cutoff,
+                    var1Relation,
+                    var2Relation,
+                    groupByCat = colorByGroup,
+                    catDt = inputCatDt,
+                    var1AggregateBy = var1AggregateBy,
+                    var2AggregateBy = var2AggregateBy
+                )
+                # saveRDS(filteredDf, file = "data/filteredDf.rds")
+                return(filteredDf)
+            }
         })
     })
 
@@ -457,14 +516,13 @@ shinyServer(function(input, output, session) {
         dataHeat <- reduceProfile(filteredDataHeat())
         return(dataHeat)
     })
-
+    
     # =========================== MAIN PROFILE TAB =============================
 
     # * get total number of genes ----------------------------------------------
     output$totalGeneNumber.ui <- renderUI({
         geneList <- getMainInput()
         out <- as.list(levels(factor(geneList$geneID)))
-
         listIn <- input$list
         if (!is.null(listIn)) {
             list <- read.table(file = listIn$datapath, header = FALSE)
@@ -490,7 +548,9 @@ shinyServer(function(input, output, session) {
         geneList <- dataHeat()
         out <- as.list(levels(factor(geneList$geneID)))
         out <- append("none", out)
-        selectInput("geneHighlight", "Highlight:", out, selected = out[1])
+        selectInput(
+            "geneHighlight", "Select gene to highlight:", out, selected = out[1]
+        )
     })
 
     # * update plot size based on input ----------------------------------------
@@ -500,7 +560,7 @@ shinyServer(function(input, output, session) {
         if (input$autoSizing) {
             inputSuperTaxon <- inputTaxonName()
             nrTaxa <- nlevels(as.factor(inputSuperTaxon$fullName))
-            nrGene <- input$endIndex
+            nrGene <- nlevels(as.factor(longDataframe$geneID))
             # adapte to axis type
             if (input$xAxis == "taxa") {
                 h <- nrGene
@@ -718,7 +778,7 @@ shinyServer(function(input, output, session) {
                 nrTaxa <- nlevels(as.factor(inputSuperTaxon$fullName))
             }
             if (input$inSeq[1] == "all") {
-                nrGene <- input$endIndex
+                nrGene <- nlevels(as.factor(longDataframe$geneID))
             }
             # adapte to axis type
             if (input$xAxisSelected == "taxa") {
