@@ -76,7 +76,7 @@ shinyServer(function(input, output, session) {
     })
     
     observe({
-        fileExist <- file.exists("data/filteredDf.rds")
+        fileExist <- file.exists("data/filteredDfspecies.rds")
         if (fileExist == FALSE) {
             msg <- paste0(
                 "Please wait while RDS data are being downloaded!!!"
@@ -354,10 +354,11 @@ shinyServer(function(input, output, session) {
         #         taxaTree = NULL #inputTaxaTree
         #     )
         #     # return
-        #     saveRDS(sortedOut, file = "data/sortedInputTaxa.rds")
+        #     print(getwd())
+        #     saveRDS(sortedOut, file = paste0("data/sortedInput",input$rankSelect,".rds"))
         #     return(sortedOut)
         # })
-        sortedOut <- readRDS("data/sortedInputTaxa.rds")
+        sortedOut <- readRDS(paste0("data/sortedInput",input$rankSelect,".rds"))
         return(sortedOut)
     })
 
@@ -386,7 +387,6 @@ shinyServer(function(input, output, session) {
     #     endIndex <- nlevels(as.factor(longDataframe$geneID))
     #     withProgress(message = 'Subseting data...', value = 0.5, {
     #         longDataframe <- unsortID(longDataframe, FALSE)
-    #         print(as.factor(longDataframe$geneID))
     #         listIn <- input$list
     #         if (!is.null(listIn)) {
     #             list <- read.table(file = listIn$datapath, header = FALSE)
@@ -435,13 +435,10 @@ shinyServer(function(input, output, session) {
         #         taxaCount = getCountTaxa(),
         #         coorthoCOMax = coorthologCutoffMax
         #     )
-        #     saveRDS(fullMdData, file = "data/fullMdData.rds")
+        #     saveRDS(fullMdData, file = paste0("data/fullMdData",input$rankSelect,".rds"))
         #     return(fullMdData)
         # })
-        fullMdData <- readRDS("data/fullMdData.rds")
-        # fullMdData$geneID <- factor(
-        #     fullMdData$geneID, levels = unique(fullMdData$geneID)
-        # )
+        fullMdData <- readRDS(paste0("data/fullMdData",input$rankSelect,".rds"))
         return(fullMdData)
     })
 
@@ -471,6 +468,7 @@ shinyServer(function(input, output, session) {
             }
             
             if (
+                # 4==5
                 (is.null(var1Cutoff) && is.null(var2Cutoff) &&
                 is.null(percentCutoff) && coorthologCutoffMax == 999) ||
                 (var1Cutoff[1] == 0.0 && var1Cutoff[2] == 1.0 &&
@@ -478,7 +476,7 @@ shinyServer(function(input, output, session) {
                 percentCutoff[1] == 0.0 && percentCutoff[2] == 1.0 &&
                 coorthologCutoffMax == 999)
             ) {
-                filteredDf <- readRDS("data/filteredDf.rds")
+                filteredDf <- readRDS(paste0("data/filteredDf",input$rankSelect,".rds"))
                 return(filteredDf)
             } else {
                 # get selected supertaxon name
@@ -504,7 +502,7 @@ shinyServer(function(input, output, session) {
                     var1AggregateBy = var1AggregateBy,
                     var2AggregateBy = var2AggregateBy
                 )
-                # saveRDS(filteredDf, file = "data/filteredDf.rds")
+                # saveRDS(filteredDf, file = paste0("data/filteredDf",input$rankSelect,".rds"))
                 return(filteredDf)
             }
         })

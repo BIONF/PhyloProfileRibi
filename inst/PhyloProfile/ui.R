@@ -36,7 +36,7 @@ shinyUI(
                         checkboxInput(
                             "autoSizing",
                             strong(em("Auto sizing")),
-                            value = FALSE,
+                            value = TRUE,
                             width = NULL
                         )
                     ),
@@ -162,10 +162,22 @@ shinyUI(
                 sidebarLayout(
                     # * sidebar panel for profile highlight --------------------
                     sidebarPanel(
+                        HTML("<p><span style=\"color: #ff0000;\"><em><strong>Due to the large amount of data, it could take a while for rendering the plot!</strong></em></span></p>"),
+                        hr(),
                         strong(("Select working taxonomy rank:")),
                         selectInput(
                             "rankSelect", label = "",
-                            choices = PhyloProfile::getTaxonomyRanks(),
+                            choices = c(
+                                #"strain",
+                                "species",
+                                "genus",
+                                "family",
+                                "order",
+                                "class",
+                                "phylum",
+                                "kingdom",
+                                "superkingdom"
+                            ), #PhyloProfile::getTaxonomyRanks(),
                             selected = "species"
                         ),
                         uiOutput("totalGeneNumber.ui"),
@@ -223,9 +235,7 @@ shinyUI(
                             #     ),
                             #     "bottom"
                             # )
-                        ),
-                        br(),
-                        uiOutput("warningMsg")
+                        )
                     ),
                     # * main panel for profile plot ----------------------------
                     mainPanel(
