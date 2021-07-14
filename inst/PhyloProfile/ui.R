@@ -42,7 +42,7 @@ shinyUI(
                     ),
                     column(
                         1,
-                        createPlotSize("width", "Width (px)", 26876),
+                        createPlotSize("width", "Width (px)", 21000),
                         actionButton(
                             "setColor", "Change colors",
                             style = "padding:4px; font-size:100%"
@@ -106,19 +106,13 @@ shinyUI(
                         checkboxInput(
                             "selectedAutoSizing",
                             strong(em("Auto sizing")),
-                            value = TRUE,
+                            value = FALSE,
                             width = NULL
                         )
                     ),
                     column(
                         1,
-                        createPlotSize("selectedWidth", "Width (px)", 600),
-                        checkboxInput(
-                            "selectedAutoSizing",
-                            strong(em("Auto sizing")),
-                            value = TRUE,
-                            width = NULL
-                        )
+                        createPlotSize("selectedWidth", "Width (px)", 600)
                     ),
                     column(
                         1, createPlotSize("selectedHeight", "Height (px)", 600),
@@ -489,6 +483,13 @@ shinyUI(
             "Plot appearance configuration",
             "mainPlotConfig",
             size = "small",
+            strong(em(
+                paste(
+                    "Note: due to the size limit, the font size and dot",
+                    "zooming factor will not affect the plot on SPECIES level!"
+                )
+            )),
+            hr(),
             column(
                 6, createTextSize("xSize", "X-axis label size (px)", 14, 100)
             ),

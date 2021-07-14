@@ -451,6 +451,7 @@ shinyServer(function(input, output, session) {
         # check input file
         filein <- mainInput
         req(filein)
+        req(input$rankSelect)
         withProgress(message = 'Creating data for plotting...', value = 0.5, {
             # get all cutoffs
             if (input$autoUpdate == TRUE) {
@@ -555,6 +556,7 @@ shinyServer(function(input, output, session) {
     observe({
         longDataframe <- getMainInput()
         req(longDataframe)
+        req(input$rankSelect)
         if (input$autoSizing) {
             inputSuperTaxon <- inputTaxonName()
             nrTaxa <- nlevels(as.factor(inputSuperTaxon$fullName))
@@ -584,6 +586,17 @@ shinyServer(function(input, output, session) {
             # update plot size based on number of genes/taxa
             hv <- hv + 300
             wv <- wv + 300
+            
+            if (input$rankSelect == "species") {
+                if (input$xAxis == "taxa") {
+                    if (hv > 4136) hv <- 4136
+                    if (wv > 21000) wv <- 21000
+                } else {
+                    if (wv > 4136) wv <- 4136
+                    if (hv > 21000) hv <- 21000
+                }
+            }
+            
             if (h <= 20) {
                 updateSelectInput(
                     session, "mainLegend",
@@ -616,6 +629,37 @@ shinyServer(function(input, output, session) {
             )
         }
     })
+    
+    # observe({
+    #     if (input$rankSelect == "species") {
+    #         updateSliderInput(
+    #             session,
+    #             "dotZoom", "",
+    #             min = -1,
+    #             max = 3,
+    #             step = 0.1,
+    #             value = -0.2
+    #         )
+    #         updateNumericInput(
+    #             session,
+    #             "xSize",
+    #             "X-axis label size (px)",
+    #             min = 3,
+    #             max = 99,
+    #             step = 1,
+    #             value = 12
+    #         )
+    #         updateNumericInput(
+    #             session,
+    #             "ySize",
+    #             "Y-axis label size (px)",
+    #             min = 3,
+    #             max = 99,
+    #             step = 1,
+    #             value = 12
+    #         )
+    #     }
+    # })
 
     # * reset configuration windows of Main plot -------------------------------
     observeEvent(input$resetMainConfig, {
