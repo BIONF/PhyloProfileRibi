@@ -172,7 +172,7 @@ shinyUI(
                                 "kingdom",
                                 "superkingdom"
                             ), #PhyloProfile::getTaxonomyRanks(),
-                            selected = "species"
+                            selected = "family"
                         ),
                         uiOutput("totalGeneNumber.ui"),
                         uiOutput("highlightGeneUI"),
