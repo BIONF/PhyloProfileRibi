@@ -26,7 +26,7 @@ From an R terminal, PhyloRBF can be installed locally using *devtools*:
 ```r
 if (!requireNamespace("devtools"))
     install.packages("devtools")
-devtools::install_github("BIONF/PhyloRBF", INSTALL_opts = c('--no-lock'), build_vignettes = TRUE)
+devtools::install_github("BIONF/PhyloRBF", INSTALL_opts = c('--no-lock'), dependencies = TRUE, build_vignettes = TRUE)
 ```
 
 Then, to run it, enter:
