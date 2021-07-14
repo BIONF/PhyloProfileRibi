@@ -17,7 +17,7 @@ source("R/functions.R")
 createProfilePlotUI <- function(id) {
     ns <- NS(id)
     tagList(
-        uiOutput(ns("plot.ui")),
+        shinycssloaders::withSpinner(uiOutput(ns("plot.ui"))),
         br(),
         downloadButton(ns("profileDownload"),"Download profile",
                        class = "butDL"),
@@ -75,12 +75,23 @@ createProfilePlot <- function(input, output, session,
             if (is.null(inSeq()[1]) | is.null(inTaxa()[1])) return()
             else if (inSeq()[1] == "all" & inTaxa()[1] == "all")  return()
         }
+        
+        xAxis <- parameters()$xAxis
+        width <- parameters()$width
+        height <- parameters()$height
+        if (xAxis == "taxa") {
+            if (width > 21000) width <- 21000
+            if (height > 4136) height <- 4136
+        } else {
+            if (width > 4136) width <- 4136
+            if (height > 21000) height <- 21000
+        }
 
         # shinycssloaders::withSpinner(
             plotOutput(
                 ns("plot"),
-                width = parameters()$width,
-                height = parameters()$height,
+                width = width,
+                height = height,
                 click = ns("plotClick")
             )
         # )

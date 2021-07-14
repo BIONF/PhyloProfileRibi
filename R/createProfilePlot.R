@@ -71,7 +71,7 @@ heatmapPlottingCr <- function(data = NULL, parm = NULL, rank = "species"){
         if (dotZoom > -0.2) dotZoom = -0.2
         if (xSize > 12) xSize = 12
         if (ySize > 12) ySize = 12
-    }
+    } 
     
     # create heatmap plot with geom_point & scale_color_gradient for present
     # ortho & var1, geom_tile & scale_fill_gradient for var2

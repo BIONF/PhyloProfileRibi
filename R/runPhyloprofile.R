@@ -6,6 +6,7 @@
 #' @importFrom colourpicker colourInput
 #' @import energy
 #' @import shinyBS
+#' @import shinycssloaders
 #' @rawNamespace import(RCurl, except = reset)
 #' @rawNamespace import(shinyjs, except = colourInput)
 

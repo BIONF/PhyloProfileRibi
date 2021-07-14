@@ -18,6 +18,6 @@ Imports:
 RoxygenNote: 7.1.1
 Suggests:
     knitr, rmarkdown, testthat,
-    ape, bioDist, Biostrings, data.table,
+    ape, bioDist, Biostrings, data.table, shinycssloaders,
     gridExtra, pbapply, RColorBrewer, shiny, OmaDB, plyr, xml2, zoo
 VignetteBuilder: knitr

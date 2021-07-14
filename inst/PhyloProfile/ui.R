@@ -106,7 +106,7 @@ shinyUI(
                         checkboxInput(
                             "selectedAutoSizing",
                             strong(em("Auto sizing")),
-                            value = FALSE,
+                            value = TRUE,
                             width = NULL
                         )
                     ),
@@ -156,7 +156,7 @@ shinyUI(
                 sidebarLayout(
                     # * sidebar panel for profile highlight --------------------
                     sidebarPanel(
-                        HTML("<p><span style=\"color: #ff0000;\"><em><strong>Due to the large amount of data, it could take a while for rendering the plot!</strong></em></span></p>"),
+                        HTML("<p><span style=\"color: #ff0000;\"><em><strong>Rendering the plot may take some time due to large amount of data!</strong></em></span></p>"),
                         hr(),
                         strong(("Select working taxonomy rank:")),
                         selectInput(
@@ -229,11 +229,13 @@ shinyUI(
                             #     ),
                             #     "bottom"
                             # )
-                        )
+                        ),
+                        width = 2
                     ),
                     # * main panel for profile plot ----------------------------
                     mainPanel(
-                        createProfilePlotUI("mainProfile")
+                        createProfilePlotUI("mainProfile"),
+                        width = 10
                     )
                 )
             ),
@@ -305,7 +307,8 @@ shinyUI(
                                 or taxa for customized profile!"
                             )
                         ),
-                        createProfilePlotUI("customizedProfile")
+                        createProfilePlotUI("customizedProfile"),
+                        width = 8
                     )
                 )
             ),
