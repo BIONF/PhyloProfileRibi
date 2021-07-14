@@ -486,7 +486,7 @@ shinyUI(
             strong(em(
                 paste(
                     "Note: due to the size limit, the font size and dot",
-                    "zooming factor will not affect the plot on SPECIES level!"
+                    "zooming factor might not affect the plot on SPECIES level!"
                 )
             )),
             hr(),
