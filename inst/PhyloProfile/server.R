@@ -517,7 +517,23 @@ shinyServer(function(input, output, session) {
     })
     
     # =========================== MAIN PROFILE TAB =============================
-
+    # ** warning message -------------------------------------------------------
+    observe({
+        desc = paste(
+            "<p>Rendering the plot may take some time due to large amount of data!</p>",
+            "<p>For small monitors, the preset plot size (8800x5000) may throw",
+            "an error. In that case, please reduce the plot size and press the",
+            "\'Update plot\' button.</p>"
+        )
+        
+        if (input$tabs == "Main profile") {
+            createAlert(
+                session, "warningUI", "warningPlot",
+                title = "", content = desc, append = FALSE
+            )
+        }
+    })
+    
     # * get total number of genes ----------------------------------------------
     output$totalGeneNumber.ui <- renderUI({
         geneList <- getMainInput()

@@ -36,20 +36,20 @@ shinyUI(
                         checkboxInput(
                             "autoSizing",
                             strong(em("Auto sizing")),
-                            value = TRUE,
+                            value = FALSE,
                             width = NULL
                         )
                     ),
                     column(
                         1,
-                        createPlotSize("width", "Width (px)", 21000),
+                        createPlotSize("width", "Width (px)", 8800),
                         actionButton(
                             "setColor", "Change colors",
                             style = "padding:4px; font-size:100%"
                         )
                     ),
                     column(
-                        1, createPlotSize("height", "Height (px)", 4136),
+                        1, createPlotSize("height", "Height (px)", 5000),
                         actionButton("mainPlotConfig", "Appearance")
                     ),
                     column(
@@ -153,11 +153,10 @@ shinyUI(
             # MAIN PROFILE TAB =================================================
             tabPanel(
                 "Main profile",
+                bsAlert("warningUI"),
                 sidebarLayout(
                     # * sidebar panel for profile highlight --------------------
                     sidebarPanel(
-                        HTML("<p><span style=\"color: #ff0000;\"><em><strong>Rendering the plot may take some time due to large amount of data!</strong></em></span></p>"),
-                        hr(),
                         strong(("Select working taxonomy rank:")),
                         selectInput(
                             "rankSelect", label = "",
@@ -494,10 +493,10 @@ shinyUI(
             )),
             hr(),
             column(
-                6, createTextSize("xSize", "X-axis label size (px)", 14, 100)
+                6, createTextSize("xSize", "X-axis label size (px)", 12, 100)
             ),
             column(
-                6, createTextSize("ySize", "Y-axis label size (px)", 14, 100)
+                6, createTextSize("ySize", "Y-axis label size (px)", 12, 100)
             ),
             column(
                 6,
@@ -539,7 +538,7 @@ shinyUI(
                     min = -1,
                     max = 3,
                     step = 0.1,
-                    value = 0,
+                    value = -0.3,
                     width = 250
                 ),
                 HTML("<em>dot size = (1+α)*defaultSize<br>defaultSize
