@@ -4,8 +4,8 @@
 \alias{highlightProfilePlotCr}
 \title{Highlight gene and/or taxon of interest on the phylogenetic profile plot}
 \usage{
-highlightProfilePlotCr(data, plotParameter = NULL, taxonHighlight =
-    "none", rankName = "none", geneHighlight = "none")
+highlightProfilePlotCr(data = NULL, plotParameter = NULL, 
+    taxonHighlight = "none", rankName = "species", geneHighlight = "none")
 }
 \arguments{
 \item{data}{dataframe for plotting the heatmap phylogentic profile (either
@@ -40,7 +40,7 @@ as ggplot object.
 Highlight gene and/or taxon of interest on the phylogenetic profile plot
 }
 \seealso{
-\code{\link{dataMainPlot}}, \code{\link{dataCustomizedPlot}}
+\code{\link{dataMainPlotCr}}, \code{\link{dataCustomizedPlotCr}}
 }
 \author{
 Vinh Tran {tran@bio.uni-frankfurt.de}

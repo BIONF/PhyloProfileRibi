@@ -42,9 +42,9 @@ createProfilePlot <- function(input, output, session,
 
         if (typeProfile() == "customizedProfile") {
             if (is.null(inTaxa()) | is.null(inSeq())) return()
-            dataHeat <- dataCustomizedPlot(data(), inTaxa(), inSeq())
+            dataHeat <- dataCustomizedPlotCr(data(), inTaxa(), inSeq())
         } else {
-            dataHeat <- dataMainPlot(data())
+            dataHeat <- dataMainPlotCr(data())
         }
         return(dataHeat)
     })
@@ -75,7 +75,7 @@ createProfilePlot <- function(input, output, session,
             if (is.null(inSeq()[1]) | is.null(inTaxa()[1])) return()
             else if (inSeq()[1] == "all" & inTaxa()[1] == "all")  return()
         }
-        
+
         xAxis <- parameters()$xAxis
         width <- parameters()$width
         height <- parameters()$height

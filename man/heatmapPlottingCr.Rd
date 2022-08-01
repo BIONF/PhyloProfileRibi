@@ -14,7 +14,7 @@ full or subset profiles)}
 "genes" - default = "taxa"; (2+3) names of 2 variables var1ID and var2ID -
 default = "var1" & "var2"; (4+5) mid value and color for mid value of var1 -
 default is 0.5 and #FFFFFF; (6) color for lowest var1 - default = "#FF8C00";
-(7) color for highest var1 - default = "#4682B4"; (8+9) mid value and color 
+(7) color for highest var1 - default = "#4682B4"; (8+9) mid value and color
 for mid value of var2 - default is 1 and #FFFFFF;(10) color for lowest var2 -
 default = "#FFFFFF", (11) color for highest var2 - default = "#F0E68C", (12)
 color of co-orthologs - default = "#07D000"; (13+14+15) text sizes for x, y
@@ -35,7 +35,7 @@ Create profile heatmap plot
 }
 \examples{
 data("superTaxonProfile", package="PhyloProfile")
-plotDf <- dataMainPlot(superTaxonProfile)
+plotDf <- dataMainPlotCr(superTaxonProfile)
 plotParameter <- list(
     "xAxis" = "taxa",
     "var1ID" = "FAS_FW",
@@ -62,7 +62,7 @@ plotParameter <- list(
 heatmapPlottingCr(plotDf, plotParameter, "species")
 }
 \seealso{
-\code{\link{dataMainPlot}}, \code{\link{dataCustomizedPlot}}
+\code{\link{dataMainPlotCr}}, \code{\link{dataCustomizedPlotCr}}
 }
 \author{
 Vinh Tran {tran@bio.uni-frankfurt.de}
