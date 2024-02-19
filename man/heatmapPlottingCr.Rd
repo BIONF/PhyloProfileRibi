@@ -33,34 +33,6 @@ A profile heatmap plot as a ggplot object.
 \description{
 Create profile heatmap plot
 }
-\examples{
-data("superTaxonProfile", package="PhyloProfile")
-plotDf <- dataMainPlotCr(superTaxonProfile)
-plotParameter <- list(
-    "xAxis" = "taxa",
-    "var1ID" = "FAS_FW",
-    "var2ID"  = "FAS_BW",
-    "midVar1" = 0.5,
-    "midColorVar1" =  "#FFFFFF",
-    "lowColorVar1" =  "#FF8C00",
-    "highColorVar1" = "#4682B4",
-    "midVar2" = 1,
-    "midColorVar2" =  "#FFFFFF",
-    "lowColorVar2" = "#CB4C4E",
-    "highColorVar2" = "#3E436F",
-    "paraColor" = "#07D000",
-    "xSize" = 8,
-    "ySize" = 8,
-    "legendSize" = 8,
-    "mainLegend" = "top",
-    "dotZoom" = 0,
-    "xAngle" = 60,
-    "guideline" = 0,
-    "colorByGroup" = FALSE
-)
-
-heatmapPlottingCr(plotDf, plotParameter, "species")
-}
 \seealso{
 \code{\link{dataMainPlotCr}}, \code{\link{dataCustomizedPlotCr}}
 }

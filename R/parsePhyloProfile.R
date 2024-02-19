@@ -160,6 +160,84 @@ getSelectedTaxonNamesCr <- function(
     }
 }
 
+#' taxa2dist
+#' @param x taxa matrix
+#' @param varstep var-step
+#' @param check check
+#' @param labels labels
+#' @return a distance matrix
+#' @author function from taxize library
+
+taxa2dist <- function(x, varstep = FALSE, check = TRUE, labels) {
+    rich <- apply(x, 2, function(taxa) length(unique(taxa)))
+    S <- nrow(x)
+    if (check) {
+        keep <- rich < S & rich > 1
+        rich <- rich[keep]
+        x <- x[, keep]
+    }
+    i <- rev(order(rich))
+    x <- x[, i]
+    rich <- rich[i]
+    if (varstep) {
+        add <- -diff(c(nrow(x), rich, 1))
+        add <- add/c(S, rich)
+        add <- add/sum(add) * 100
+    }
+    else {
+        add <- rep(100/(ncol(x) + check), ncol(x) + check)
+    }
+    if (!is.null(names(add)))
+        names(add) <- c("Base", names(add)[-length(add)])
+    if (!check)
+        add <- c(0, add)
+    out <- matrix(add[1], nrow(x), nrow(x))
+    for (i in seq_len(ncol(x))) {
+        out <- out + add[i + 1] * outer(x[, i], x[, i], "!=")
+    }
+    out <- stats::as.dist(out)
+    attr(out, "method") <- "taxa2dist"
+    attr(out, "steps") <- add
+    if (missing(labels)) {
+        attr(out, "Labels") <- rownames(x)
+    }
+    else {
+        if (length(labels) != nrow(x))
+            warning("Labels are wrong: needed ", nrow(x), " got ",
+                    length(labels))
+        attr(out, "Labels") <- as.character(labels)
+    }
+    if (!check && any(out <= 0))
+        warning("you used 'check=FALSE' and some distances are zero
+                -- was this intended?")
+    out
+}
+
+#' Create rooted tree from a taxonomy matrix
+#' @export
+#' @param df data frame contains taxonomy matrix used for generating tree
+#' (see distDf in example)
+#' @param rootTaxon taxon used for rooting the taxonomy tree
+#' @importFrom ape as.phylo
+#' @importFrom ape root
+#' @return A rooted taxonomy tree as an object of class "phylo".
+#' @author Vinh Tran {tran@bio.uni-frankfurt.de}
+
+createRootedTreeCr <- function(df, rootTaxon = NULL){
+    if (missing(df)) return("No taxonomy matrix given!")
+    # calculate distance matrix
+    taxdis <- tryCatch(taxa2dist(df), error = function(e) e)
+    # create tree
+    tree <- ape::as.phylo(stats::hclust(taxdis))
+    # root tree
+    if (missing(rootTaxon)) rootTaxon = tree$tip.label[1]
+    if (!(rootTaxon %in% tree$tip.label)) rootTaxon = tree$tip.label[1]
+    tree <- ape::root(tree, outgroup = rootTaxon, resolve.root = TRUE)
+    # return
+    return(tree)
+}
+
+
 #' Sort list of (super)taxa based on a selected reference (super)taxon
 #' @usage sortInputTaxaCr(taxonIDs = NULL, rankName, refTaxon = NULL,
 #'     taxaTree = NULL)
@@ -201,7 +279,7 @@ sortInputTaxaCr <- function(
         distDf <- subset(Dt, select = -c(ncbiID, fullName))
         row.names(distDf) <- distDf$abbrName
         distDf <- distDf[, -1]
-        taxaTree <- PhyloProfile::createRootedTree(
+        taxaTree <- createRootedTreeCr(
             distDf, as.character(repTaxon$abbrName)
         )
     } else
@@ -242,4 +320,62 @@ sortInputTaxaCr <- function(
     sortedOut$supertaxon <- as.factor(sortedOut$supertaxon)
     sortedOut$category <- as.factor(sortedOut$category)
     return(sortedOut)
+}
+
+
+#' Reduce the filtered profile data into supertaxon level
+#' @description Reduce data of the processed phylogenetic profiles from input
+#' taxonomy rank into supertaxon level (e.g. from species to phylum)
+#' @param filteredProfile dataframe contains the filtered profiles (see
+#' ?parseInfoProfile, ?filterProfileData and ?filteredProfile)
+#' @return A reduced dataframe contains only profile data for the selected
+#' supertaxon rank. This dataframe contains only supertaxa and their value
+#' (mVar1 & mVar2) for each gene.
+#' @author Vinh Tran {tran@bio.uni-frankfurt.de}
+#' @export
+
+reduceProfileCr <- function(filteredProfile) {
+    if (is.null(filteredProfile)) stop("Profile data cannot be NULL!")
+    
+    # check if working with the lowest taxonomy rank; 1 for NO; 0 for YES
+    flag <- 1
+    if (length(unique(levels(as.factor(filteredProfile$numberSpec)))) == 1) {
+        if (unique(levels(as.factor(filteredProfile$numberSpec))) == 1) {
+            superDfExt <- filteredProfile[, c(
+                "geneID", "supertaxon", "supertaxonID",
+                "var1", "presSpec", "category", "orthoID", "var2", "paralog"
+            )]
+            flag <- 0
+        }
+    }
+    if (flag == 1) {
+        # get representative orthoID that has m VAR1 for each supertaxon
+        mOrthoID <- filteredProfile[, c(
+            "geneID", "supertaxon", "var1", "mVar1", "orthoID", "presSpec"
+        )]
+        mOrthoID <- subset(mOrthoID, mOrthoID$var1 == mOrthoID$mVar1)
+        colnames(mOrthoID) <- c(
+            "geneID", "supertaxon", "var1", "mVar1", "orthoID", "presSpec"
+        )
+        mOrthoID <- mOrthoID[!is.na(mOrthoID$orthoID), ]
+        mOrthoID <- mOrthoID[, c("geneID", "supertaxon", "orthoID", "presSpec")]
+        mOrthoID <- mOrthoID[!duplicated(mOrthoID[, seq_len(2)]), ]
+        # get data set for PhyloProfile plotting (contains only supertaxa info)
+        superDf <- subset(filteredProfile, select = c(
+            "geneID", "supertaxon", "supertaxonID",
+            "mVar1", "category", "mVar2", "paralog"
+        ))
+        superDf <- superDf[!duplicated(superDf), ]
+        superDfExt <- merge(
+            superDf, mOrthoID, by = c("geneID", "supertaxon"), all.x = TRUE
+        )
+        superDfExt <- superDfExt[, c(
+            "geneID", "supertaxon", "supertaxonID",
+            "mVar1", "presSpec", "category", "orthoID", "mVar2", "paralog"
+        )]
+        # rename mVar to var
+        names(superDfExt)[names(superDfExt) == "mVar1"] <- "var1"
+        names(superDfExt)[names(superDfExt) == "mVar2"] <- "var2"
+    }
+    return(superDfExt)
 }

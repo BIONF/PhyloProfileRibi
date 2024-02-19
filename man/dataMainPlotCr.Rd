@@ -23,10 +23,6 @@ species that have orthologs in each supertaxon (presSpec).
 \description{
 Create data for main profile plot
 }
-\examples{
-data("superTaxonProfile", package="PhyloProfile")
-dataMainPlotCr(superTaxonProfile)
-}
 \seealso{
 \code{\link{filterProfileData}}
 }

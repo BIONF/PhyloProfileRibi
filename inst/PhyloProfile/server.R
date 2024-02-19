@@ -512,7 +512,7 @@ shinyServer(function(input, output, session) {
     # * heatmap data input -----------------------------------------------------
     dataHeat <- reactive({
         req(filteredDataHeat())
-        dataHeat <- reduceProfile(filteredDataHeat())
+        dataHeat <- PhyloRBF::reduceProfileCr(filteredDataHeat())
         return(dataHeat)
     })
     

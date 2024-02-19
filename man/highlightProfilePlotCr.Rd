@@ -4,7 +4,7 @@
 \alias{highlightProfilePlotCr}
 \title{Highlight gene and/or taxon of interest on the phylogenetic profile plot}
 \usage{
-highlightProfilePlotCr(data = NULL, plotParameter = NULL, 
+highlightProfilePlotCr(data = NULL, plotParameter = NULL,
     taxonHighlight = "none", rankName = "species", geneHighlight = "none")
 }
 \arguments{

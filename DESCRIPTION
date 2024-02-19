@@ -1,6 +1,6 @@
 Package: PhyloRBF
-Version: 1.1.3
-Date: 2022-08-01
+Version: 1.1.4
+Date: 2024-02-19
 Title: PhyloRBF
 Authors@R: c(
     person("Vinh", "Tran", role = c("aut", "cre"), email = "tran@bio.uni-frankfurt.de"),
@@ -13,10 +13,10 @@ Depends: R (>= 4.1.0)
 Encoding: UTF-8
 biocViews: Software, Visualization, DataRepresentation, MultipleComparison, FunctionalPrediction
 Imports:
-    BiocStyle, colourpicker, data.table, DT, energy, ggplot2, RCurl, shinyBS,
-    shinyjs, shinycssloaders, PhyloProfile (>= 1.6.4)
-RoxygenNote: 7.2.0
+    ape, BiocStyle, colourpicker, data.table, DT, energy, ggplot2, RCurl, 
+    shinyBS, shinyjs, shinycssloaders, PhyloProfile (>= 1.6.4)
+RoxygenNote: 7.2.3
 Suggests:
-    knitr, rmarkdown, testthat, ape, bioDist, Biostrings, 
+    knitr, rmarkdown, testthat, bioDist, Biostrings, 
     gridExtra, pbapply, RColorBrewer, shiny, OmaDB, plyr, xml2, zoo
 VignetteBuilder: knitr

@@ -13,9 +13,6 @@
 #' @import data.table
 #' @author Vinh Tran {tran@bio.uni-frankfurt.de}
 #' @seealso \code{\link{filterProfileData}}
-#' @examples
-#' data("superTaxonProfile", package="PhyloProfile")
-#' dataMainPlotCr(superTaxonProfile)
 
 dataMainPlotCr <- function(dataHeat = NULL){
     if (is.null(dataHeat)) stop("Input data cannot be NULL!")
@@ -74,11 +71,6 @@ dataMainPlotCr <- function(dataHeat = NULL){
 #' @return A dataframe contains data for plotting the customized profile.
 #' @author Vinh Tran {tran@bio.uni-frankfurt.de}
 #' @seealso \code{\link{filterProfileData}}
-#' @examples
-#' data("superTaxonProfile", package="PhyloProfile")
-#' selectedTaxa <- c("Mammalia", "Saccharomycetes", "Insecta")
-#' selectedSeq <- "all"
-#' dataCustomizedPlotCr(superTaxonProfile, selectedTaxa, selectedSeq)
 
 dataCustomizedPlotCr <- function(
         dataHeat = NULL, selectedTaxa = "all", selectedSeq = "all"
@@ -154,33 +146,6 @@ dataCustomizedPlotCr <- function(
 #' @import ggplot2
 #' @author Vinh Tran {tran@bio.uni-frankfurt.de}
 #' @seealso \code{\link{dataMainPlotCr}}, \code{\link{dataCustomizedPlotCr}}
-#' @examples
-#' data("superTaxonProfile", package="PhyloProfile")
-#' plotDf <- dataMainPlotCr(superTaxonProfile)
-#' plotParameter <- list(
-#'     "xAxis" = "taxa",
-#'     "var1ID" = "FAS_FW",
-#'     "var2ID"  = "FAS_BW",
-#'     "midVar1" = 0.5,
-#'     "midColorVar1" =  "#FFFFFF",
-#'     "lowColorVar1" =  "#FF8C00",
-#'     "highColorVar1" = "#4682B4",
-#'     "midVar2" = 1,
-#'     "midColorVar2" =  "#FFFFFF",
-#'     "lowColorVar2" = "#CB4C4E",
-#'     "highColorVar2" = "#3E436F",
-#'     "paraColor" = "#07D000",
-#'     "xSize" = 8,
-#'     "ySize" = 8,
-#'     "legendSize" = 8,
-#'     "mainLegend" = "top",
-#'     "dotZoom" = 0,
-#'     "xAngle" = 60,
-#'     "guideline" = 0,
-#'     "colorByGroup" = FALSE
-#' )
-#'
-#' heatmapPlottingCr(plotDf, plotParameter, "species")
 
 heatmapPlottingCr <- function(data = NULL, parm = NULL, rank = "species"){
     if (is.null(data)) stop("Input data cannot be NULL!")
@@ -301,7 +266,7 @@ heatmapPlottingCr <- function(data = NULL, parm = NULL, rank = "species"){
 
 #' Highlight gene and/or taxon of interest on the phylogenetic profile plot
 #' @export
-#' @usage highlightProfilePlotCr(data = NULL, plotParameter = NULL, 
+#' @usage highlightProfilePlotCr(data = NULL, plotParameter = NULL,
 #'     taxonHighlight = "none", rankName = "species", geneHighlight = "none")
 #' @param data dataframe for plotting the heatmap phylogentic profile (either
 #' full or subset profiles)

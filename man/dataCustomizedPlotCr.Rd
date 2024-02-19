@@ -29,12 +29,6 @@ co-orthologs in each supertaxon (paralog and paralogNew), number of species
 in each supertaxon (numberSpec) and the % of species that have orthologs in
 each supertaxon (presSpec).
 }
-\examples{
-data("superTaxonProfile", package="PhyloProfile")
-selectedTaxa <- c("Mammalia", "Saccharomycetes", "Insecta")
-selectedSeq <- "all"
-dataCustomizedPlotCr(superTaxonProfile, selectedTaxa, selectedSeq)
-}
 \seealso{
 \code{\link{filterProfileData}}
 }
