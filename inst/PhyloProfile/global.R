@@ -8,7 +8,7 @@ source("R/functions.R")
 packages <- c(
     "ape", "bioDist", "Biostrings", "colourpicker", "data.table", "energy",
     "GenomeInfoDbData", "ggplot2", "GO.db", "grid", "gridExtra", "RColorBrewer",
-    "shiny", "shinyBS", "shinyjs", "OmaDB", "zoo"
+    "shiny", "shinyBS", "shinyjs", "OmaDB", "zoo", "PhyloRBF"
 )
 
 # Load packages
